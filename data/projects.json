@@ -1,0 +1,106 @@
+{
+  "proyectos": [
+    {
+      "id": "proj-001",
+      "tipo": "proyecto",
+      "titulo": "Crónicas del Abismo",
+      "categoria": "Modelado 3D / Texturizado",
+      "descripcionCorta": "Serie de criaturas fantásticas modeladas y texturizadas para un videojuego indie de terror.",
+      "descripcionCompleta": "Proyecto de creación de personajes para un videojuego indie de terror psicológico ambientado en un mundo subterráneo. Incluye modelado highpoly en ZBrush, retopología, texturizado PBR en Substance Painter y preparación para Unity.",
+      "portada": "https://i.imgur.com/placeholder1.jpg",
+      "galeria": [
+        "https://i.imgur.com/placeholder1.jpg",
+        "https://i.imgur.com/placeholder2.jpg",
+        "https://i.imgur.com/placeholder3.jpg"
+      ],
+      "herramientas": ["ZBrush", "Blender", "Substance Painter", "Unity"],
+      "rol": "Artista 3D Principal",
+      "linkExterno": "",
+      "destacado": true
+    },
+    {
+      "id": "proj-002",
+      "tipo": "proyecto",
+      "titulo": "Bosque de las Almas",
+      "categoria": "Ilustración 2D",
+      "descripcionCorta": "Serie de ilustraciones digitales con temática de fantasía oscura y folklore latinoamericano.",
+      "descripcionCompleta": "Serie de 6 ilustraciones digitales que exploran la intersección entre el folklore latinoamericano y la fantasía oscura. Cada pieza representa una entidad sobrenatural con una narrativa visual propia, construida con capas complejas y paletas cromáticas frías.",
+      "portada": "https://i.imgur.com/placeholder4.jpg",
+      "galeria": [
+        "https://i.imgur.com/placeholder4.jpg",
+        "https://i.imgur.com/placeholder5.jpg"
+      ],
+      "herramientas": ["Photoshop", "Procreate"],
+      "rol": "Ilustradora",
+      "linkExterno": "",
+      "destacado": true
+    },
+    {
+      "id": "proj-003",
+      "tipo": "proyecto",
+      "titulo": "Reliquary UI",
+      "categoria": "UX/UI",
+      "descripcionCorta": "Diseño de interfaz para aplicación de catalogación de artefactos de colección con estética steampunk.",
+      "descripcionCompleta": "Diseño completo de UX/UI para una aplicación de escritorio y móvil destinada a coleccionistas de artefactos. Incluye investigación de usuario, wireframes, prototipado interactivo y sistema de diseño completo con componentes reutilizables.",
+      "portada": "https://i.imgur.com/placeholder6.jpg",
+      "galeria": [
+        "https://i.imgur.com/placeholder6.jpg",
+        "https://i.imgur.com/placeholder7.jpg"
+      ],
+      "herramientas": ["Figma", "Photoshop"],
+      "rol": "Diseñadora UX/UI",
+      "linkExterno": "",
+      "destacado": false
+    }
+  ],
+  "galeria": [
+    {
+      "id": "gal-001",
+      "tipo": "galeria",
+      "titulo": "La Guardiana",
+      "imagen": "https://i.imgur.com/placeholder8.jpg",
+      "descripcion": "Ilustración digital de personaje femenino con armadura de hueso y flora oscura.",
+      "herramientas": ["Photoshop", "Procreate"]
+    },
+    {
+      "id": "gal-002",
+      "tipo": "galeria",
+      "titulo": "Render de Criatura",
+      "imagen": "https://i.imgur.com/placeholder9.jpg",
+      "descripcion": "Render final de criatura abisal modelada en Blender con iluminación cinematográfica.",
+      "herramientas": ["Blender", "Substance Painter"]
+    },
+    {
+      "id": "gal-003",
+      "tipo": "galeria",
+      "titulo": "Escultura Digital",
+      "imagen": "https://i.imgur.com/placeholder10.jpg",
+      "descripcion": "Escultura highpoly de rostro con detalles orgánicos y elementos sobrenaturales.",
+      "herramientas": ["ZBrush"]
+    },
+    {
+      "id": "gal-004",
+      "tipo": "galeria",
+      "titulo": "Estudio de Personaje",
+      "imagen": "https://i.imgur.com/placeholder11.jpg",
+      "descripcion": "Hoja de turnaround y estudios de expresión para personaje de videojuego.",
+      "herramientas": ["Photoshop", "Procreate"]
+    },
+    {
+      "id": "gal-005",
+      "tipo": "galeria",
+      "titulo": "Entorno Oscuro",
+      "imagen": "https://i.imgur.com/placeholder12.jpg",
+      "descripcion": "Concept art de entorno para videojuego de horror, estilo painterly.",
+      "herramientas": ["Photoshop"]
+    },
+    {
+      "id": "gal-006",
+      "tipo": "galeria",
+      "titulo": "Prop 3D",
+      "imagen": "https://i.imgur.com/placeholder13.jpg",
+      "descripcion": "Prop de reliquia mágica con texturizado PBR completo.",
+      "herramientas": ["Blender", "Substance Painter"]
+    }
+  ]
+}

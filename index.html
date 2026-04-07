@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Antonia Benz — Artista 2D/3D, ilustradora, modeladora y diseñadora de juegos digitales. Portafolio de fantasía oscura y terror.">
+  <meta name="theme-color" content="#05050f">
+  <title>Antonia Benz — Artista 2D/3D</title>
+
+  <!-- Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Canvas fondo -->
+  <canvas id="canvas-bg"></canvas>
+
+  <!-- Ruido de textura -->
+  <div class="noise-overlay"></div>
+
+  <!-- ============================================================
+       NAVEGACIÓN
+  ============================================================ -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#hero" class="nav-logo">AB</a>
+      <ul class="nav-links">
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="assets/cv-antoniabenz.pdf" download class="nav-cv-btn">Descargar CV</a></li>
+      </ul>
+      <div class="hamburger" aria-label="Menú" role="button" tabindex="0">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid">
+
+        <!-- Texto -->
+        <div class="hero-content">
+          <p class="hero-eyebrow">✦ Portafolio 2026</p>
+          <h1 class="hero-name">
+            Antonia
+            <span>Benz</span>
+          </h1>
+          <p class="hero-tagline">Artista 2D · 3D · Diseño de Juegos</p>
+          <p class="hero-vision">
+            "Donde lo oscuro se vuelve arte y lo fantástico cobra vida."
+          </p>
+          <div class="hero-disciplines">
+            <span class="discipline-tag">Ilustración 2D</span>
+            <span class="discipline-tag">Modelado 3D</span>
+            <span class="discipline-tag">Texturizado</span>
+            <span class="discipline-tag">Esculpido Digital</span>
+            <span class="discipline-tag">UX/UI</span>
+          </div>
+          <div class="hero-actions">
+            <a href="#proyectos" class="btn-primary">
+              <span>✦ Ver proyectos</span>
+            </a>
+            <a href="assets/cv-antoniabenz.pdf" download class="btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Descargar CV
+            </a>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="hero-visual">
+          <div class="hero-decoration"></div>
+          <div class="hero-preview-grid" id="hero-preview-grid">
+            <!-- Cargado dinámicamente desde JS -->
+            <div class="preview-card">
+              <div class="img-placeholder" style="width:100%;height:100%;">✦</div>
+            </div>
+            <div class="preview-card">
+              <div class="img-placeholder" style="width:100%;height:100%;">✦</div>
+            </div>
+            <div class="preview-card">
+              <div class="img-placeholder" style="width:100%;height:100%;">✦</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PROYECTOS
+  ============================================================ -->
+  <section id="proyectos">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">✦ Trabajos Completos</span>
+        <h2 class="section-title">Proyectos</h2>
+        <p class="section-subtitle">Videojuegos, series, piezas 3D y más — cada proyecto, una historia.</p>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filtros" id="filtros">
+        <button class="filtro-btn active" data-cat="todos">Todos</button>
+      </div>
+
+      <!-- Grid de proyectos -->
+      <div class="proyectos-grid" id="proyectos-grid">
+        <!-- Cargado dinámicamente -->
+        <div class="project-card" style="min-height:300px;">
+          <div class="project-card-image">
+            <div class="img-placeholder" style="height:240px;">Cargando...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GALERÍA
+  ============================================================ -->
+  <section id="galeria">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">✦ Piezas Individuales</span>
+        <h2 class="section-title">Galería</h2>
+        <p class="section-subtitle">Ilustraciones, renders y esculturas digitales — el arte en su forma más pura.</p>
+      </div>
+
+      <div class="galeria-grid" id="galeria-grid">
+        <!-- Cargado dinámicamente -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SOBRE MÍ
+  ============================================================ -->
+  <section id="sobre-mi">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Imagen -->
+        <div class="about-image-wrapper reveal">
+          <div class="about-image-frame">
+            <div class="about-image-placeholder">
+              <!-- Reemplaza con: <img src="assets/foto-antonia.jpg" alt="Antonia Benz"> -->
+              <span class="about-initials">AB</span>
+            </div>
+            <div class="about-badge">
+              <span class="about-badge-num">∞</span>
+              <span class="about-badge-label">Arte sin límites</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="about-content reveal reveal-delay-2">
+          <div class="section-header" style="text-align:left;margin-bottom:2rem;">
+            <span class="section-label">✦ Quién soy</span>
+            <h2 class="section-title" style="font-size:2rem;">Sobre mí</h2>
+          </div>
+
+          <p class="about-text">
+            Soy <strong>Antonia Benz</strong>, artista 2D/3D y estudiante de <em>Diseño de Juegos Digitales</em>.
+            Mi trabajo vive en la intersección entre el arte visual y el mundo del videojuego — un espacio donde
+            la técnica se convierte en emoción.
+          </p>
+          <p class="about-text">
+            Me especializo en <strong>ilustración digital, modelado y esculpido 3D, texturizado PBR</strong>
+            y diseño de experiencias visuales. Cada pieza que creo parte de una narrativa: mundos de
+            <em>fantasía oscura</em>, criaturas del horror y atmósferas que invitan a explorar lo desconocido.
+          </p>
+          <p class="about-text">
+            Creo que el arte más poderoso es el que incomoda y fascina a la vez — ese equilibrio entre
+            lo bello y lo inquietante es mi lenguaje.
+          </p>
+
+          <!-- Herramientas -->
+          <div class="tools-section">
+            <div class="tools-title">✦ Herramientas</div>
+            <div class="tools-grid" id="tools-grid">
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                Blender
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 8v8M8 12h8"/>
+                </svg>
+                ZBrush
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <path d="M3 9h18M9 21V9"/>
+                </svg>
+                Photoshop
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M4 4h16v16H4zM4 12h16M12 4v16"/>
+                </svg>
+                Substance Painter
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/>
+                  <path d="M8 21h8M12 17v4"/>
+                </svg>
+                Unity
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 3h14l2 4-9 11L2 7z"/>
+                </svg>
+                Figma
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                  <path d="M9.5 9.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5"/>
+                </svg>
+                Procreate
+              </span>
+
+              <span class="tool-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                Marmoset
+              </span>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACTO
+  ============================================================ -->
+  <section id="contacto">
+    <div class="container">
+      <div class="reveal" style="margin-bottom:1rem;">
+        <span class="section-label" style="text-align:center;display:block;">✦ Trabajemos juntos</span>
+      </div>
+      <h2 class="contact-cta reveal reveal-delay-1">
+        ¿Tienes un proyecto<br>en mente?
+      </h2>
+      <p class="contact-sub reveal reveal-delay-2">
+        Estoy disponible para colaboraciones, encargos y proyectos creativos.
+      </p>
+
+      <div class="contact-options reveal reveal-delay-2">
+        <a href="mailto:hola@antoniabenz.com" class="contact-option">
+          <svg class="contact-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <span class="contact-option-label">Correo</span>
+          <span class="contact-option-value">hola@antoniabenz.com</span>
+        </a>
+
+        <a href="https://instagram.com/antoniabenz" target="_blank" rel="noopener" class="contact-option">
+          <svg class="contact-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          <span class="contact-option-label">Instagram</span>
+          <span class="contact-option-value">@antoniabenz</span>
+        </a>
+
+        <a href="https://artstation.com/antoniabenz" target="_blank" rel="noopener" class="contact-option">
+          <svg class="contact-option-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 19l3-10 4 7 4-7 3 10"/>
+            <line x1="2" y1="19" x2="22" y2="19"/>
+          </svg>
+          <span class="contact-option-label">ArtStation</span>
+          <span class="contact-option-value">antoniabenz</span>
+        </a>
+      </div>
+
+      <!-- Redes sociales -->
+      <div class="social-links reveal reveal-delay-3">
+        <a href="https://instagram.com/antoniabenz" target="_blank" rel="noopener" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          Instagram
+        </a>
+        <a href="https://tiktok.com/@antoniabenz" target="_blank" rel="noopener" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+          </svg>
+          TikTok
+        </a>
+        <a href="https://artstation.com/antoniabenz" target="_blank" rel="noopener" class="social-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 19l3-10 4 7 4-7 3 10"/>
+            <line x1="2" y1="19" x2="22" y2="19"/>
+          </svg>
+          ArtStation
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="container">
+      <span class="footer-copy">© 2026 Antonia Benz — Todos los derechos reservados</span>
+      <span class="footer-logo">AB</span>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       MODAL SISTEMA
+  ============================================================ -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+    <div id="modal" class="modal">
+      <button id="modal-close" class="modal-close" aria-label="Cerrar">✕</button>
+      <div id="modal-content">
+        <!-- Contenido dinámico -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
