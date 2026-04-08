@@ -228,28 +228,333 @@ async function cargarDatos() {
 }
 
 // ============================================================
-// RENDER — HERO PREVIEW
+// CARRUSEL HERO — Motor de multimedia adaptativo
 // ============================================================
-function renderHeroPreview(proyectos) {
-  const grid = document.getElementById('hero-preview-grid');
-  if (!grid) return;
-  const destacados = proyectos.filter(p => p.destacado).slice(0, 3);
-  if (!destacados.length) return;
 
-  grid.innerHTML = '';
-  destacados.forEach((p, i) => {
-    const card = document.createElement('div');
-    card.className = 'preview-card';
-    card.innerHTML = `
-      ${p.portada && !p.portada.includes('placeholder')
-        ? `<img src="${p.portada}" alt="${p.titulo}" loading="lazy">`
-        : `<div class="img-placeholder">✦</div>`}
-      <div class="project-card-overlay"></div>
-      <span class="preview-card-label">${p.categoria}</span>
-    `;
-    card.addEventListener('click', () => abrirModalProyecto(p));
-    grid.appendChild(card);
+// Datos del carrusel: mezcla proyectos destacados + galería
+// Cada item puede tener tipo 'image' o 'video'
+// Para video se soporta: .mp4, .webm, .gifv (Imgur → se convierte a .mp4)
+let carouselItems = [];
+let carouselIndex = 0;
+let carouselTimer = null;
+let carouselProgressTimer = null;
+let carouselPaused = false;
+const CAROUSEL_DURATION = 10000; // 10s para imágenes
+
+function buildCarouselItems(data) {
+  const items = [];
+
+  // Proyectos destacados primero
+  data.proyectos
+    .filter(p => p.destacado)
+    .forEach(p => {
+      // Buscar videos en la galería del proyecto
+      const galeria = p.galeria || [];
+      galeria.forEach(url => {
+        if (esVideo(url)) {
+          items.push({ url: normalizarUrl(url), tipo: 'video', titulo: p.titulo, categoria: p.categoria });
+        }
+      });
+      // Portada como imagen
+      if (p.portada && !p.portada.includes('placeholder')) {
+        items.push({ url: normalizarUrl(p.portada), tipo: 'image', titulo: p.titulo, categoria: p.categoria });
+      }
+    });
+
+  // Galería individual
+  data.galeria.forEach(g => {
+    if (!g.imagen || g.imagen.includes('placeholder')) return;
+    const url = normalizarUrl(g.imagen);
+    items.push({
+      url,
+      tipo: esVideo(url) ? 'video' : 'image',
+      titulo: g.titulo || '',
+      categoria: (g.herramientas || []).join(' · ')
+    });
   });
+
+  return items;
+}
+
+function esVideo(url) {
+  return /\.(mp4|webm|ogg|gifv)(\?|$)/i.test(url);
+}
+
+function normalizarUrl(url) {
+  // Imgur .gifv → .mp4
+  return url.replace(/\.gifv$/i, '.mp4');
+}
+
+function renderHeroPreview(proyectos) {
+  carouselItems = buildCarouselItems(todosLosDatos);
+
+  // Si no hay items reales, usar placeholders visuales
+  if (!carouselItems.length) {
+    carouselItems = [
+      { url: '', tipo: 'placeholder', titulo: 'Próximamente', categoria: 'Arte 2D / 3D' },
+      { url: '', tipo: 'placeholder', titulo: 'Proyectos', categoria: 'Modelado · Texturizado' },
+    ];
+  }
+
+  inicializarCarrusel();
+}
+
+function inicializarCarrusel() {
+  const track = document.getElementById('carousel-track');
+  const dotsContainer = document.getElementById('carousel-dots');
+  if (!track || !dotsContainer) return;
+
+  // Crear slides
+  track.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
+  carouselItems.forEach((item, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+    slide.dataset.index = i;
+
+    if (item.tipo === 'video') {
+      const video = document.createElement('video');
+      video.src = item.url;
+      video.muted = true;
+      video.playsInline = true;
+      video.autoplay = false;
+      video.loop = false;
+      video.preload = 'metadata';
+      slide.appendChild(video);
+    } else if (item.tipo === 'image') {
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.alt = item.titulo || 'Arte';
+      img.loading = i === 0 ? 'eager' : 'lazy';
+      img.addEventListener('load', () => {
+        if (i === carouselIndex) ajustarAspectRatio(img.naturalWidth, img.naturalHeight);
+      });
+      slide.appendChild(img);
+    } else {
+      // Placeholder
+      const ph = document.createElement('div');
+      ph.className = 'img-placeholder';
+      ph.style.cssText = 'width:100%;height:100%;font-size:2rem;';
+      ph.textContent = '✦';
+      slide.appendChild(ph);
+    }
+
+    // Info overlay
+    if (item.titulo || item.categoria) {
+      const info = document.createElement('div');
+      info.className = 'carousel-slide-info';
+      info.innerHTML = `
+        ${item.categoria ? `<span class="carousel-slide-label">${item.categoria}</span>` : ''}
+        ${item.titulo ? `<span class="carousel-slide-title">${item.titulo}</span>` : ''}
+      `;
+      slide.appendChild(info);
+    }
+
+    // Badge de tipo
+    if (item.tipo === 'video') {
+      const badge = document.createElement('div');
+      badge.className = 'carousel-media-badge';
+      badge.innerHTML = '<span class="media-badge-dot"></span>VIDEO';
+      slide.appendChild(badge);
+    }
+
+    track.appendChild(slide);
+
+    // Dot
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Ir a slide ${i + 1}`);
+    dot.addEventListener('click', () => irASlide(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  // Botones
+  document.getElementById('carousel-prev')?.addEventListener('click', () => {
+    const prev = (carouselIndex - 1 + carouselItems.length) % carouselItems.length;
+    irASlide(prev);
+  });
+
+  document.getElementById('carousel-next')?.addEventListener('click', () => {
+    irASlide((carouselIndex + 1) % carouselItems.length);
+  });
+
+  // Pause al hover
+  const carousel = document.getElementById('hero-carousel');
+  if (carousel) {
+    carousel.addEventListener('mouseenter', () => { carouselPaused = true; pausarProgreso(); });
+    carousel.addEventListener('mouseleave', () => { carouselPaused = false; reanudarProgreso(); });
+  }
+
+  // Iniciar con el primer slide
+  cargarSlide(0);
+}
+
+function cargarSlide(index) {
+  carouselIndex = index;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === index);
+  });
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+  });
+
+  const item = carouselItems[index];
+  const activeSlide = slides[index];
+  if (!activeSlide) return;
+
+  limpiarTimer();
+
+  if (item.tipo === 'video') {
+    const video = activeSlide.querySelector('video');
+    if (video) {
+      ajustarAspectRatioVideo(video);
+      video.currentTime = 0;
+      video.play().catch(() => {});
+
+      // Cuando termina el video → avanzar
+      const onEnded = () => {
+        video.removeEventListener('ended', onEnded);
+        if (!carouselPaused) avanzarCarrusel();
+        else {
+          const waitResume = setInterval(() => {
+            if (!carouselPaused) { clearInterval(waitResume); avanzarCarrusel(); }
+          }, 300);
+        }
+      };
+      video.addEventListener('ended', onEnded);
+
+      // Fallback: si el video es muy largo (>60s), avanzar igual
+      carouselTimer = setTimeout(() => {
+        video.removeEventListener('ended', onEnded);
+        avanzarCarrusel();
+      }, 60000);
+
+      iniciarProgreso(null, video); // duración real del video
+    }
+  } else {
+    // Imagen o placeholder: 10 segundos
+    iniciarProgreso(CAROUSEL_DURATION);
+    carouselTimer = setTimeout(() => {
+      if (!carouselPaused) avanzarCarrusel();
+    }, CAROUSEL_DURATION);
+
+    // Ajustar aspect ratio si la imagen ya cargó
+    const img = activeSlide.querySelector('img');
+    if (img && img.naturalWidth) {
+      ajustarAspectRatio(img.naturalWidth, img.naturalHeight);
+    } else if (img) {
+      img.addEventListener('load', () => {
+        ajustarAspectRatio(img.naturalWidth, img.naturalHeight);
+      }, { once: true });
+    } else {
+      ajustarAspectRatio(16, 9); // placeholder default
+    }
+  }
+}
+
+function irASlide(index) {
+  if (index === carouselIndex) return;
+
+  // Pausar video anterior
+  const slides = document.querySelectorAll('.carousel-slide');
+  const prevSlide = slides[carouselIndex];
+  if (prevSlide) {
+    const video = prevSlide.querySelector('video');
+    if (video) { video.pause(); video.currentTime = 0; }
+  }
+
+  cargarSlide(index);
+}
+
+function avanzarCarrusel() {
+  const next = (carouselIndex + 1) % carouselItems.length;
+  irASlide(next);
+}
+
+// ============================================================
+// ASPECT RATIO DINÁMICO
+// ============================================================
+function ajustarAspectRatio(w, h) {
+  const frame = document.getElementById('carousel-frame');
+  if (!frame || !w || !h) return;
+  const ratio = (h / w) * 100;
+  // Clamp entre 50% (landscape 2:1) y 133% (portrait 3:4)
+  const clamped = Math.min(Math.max(ratio, 50), 100);
+  frame.style.paddingTop = clamped + '%';
+}
+
+function ajustarAspectRatioVideo(video) {
+  const actualizar = () => {
+    if (video.videoWidth && video.videoHeight) {
+      ajustarAspectRatio(video.videoWidth, video.videoHeight);
+    }
+  };
+  if (video.readyState >= 1) {
+    actualizar();
+  } else {
+    video.addEventListener('loadedmetadata', actualizar, { once: true });
+    ajustarAspectRatio(16, 9); // default mientras carga
+  }
+}
+
+// ============================================================
+// BARRA DE PROGRESO
+// ============================================================
+function iniciarProgreso(duracion, video) {
+  const bar = document.getElementById('carousel-progress');
+  if (!bar) return;
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+
+  void bar.offsetWidth; // reflow
+
+  if (video) {
+    // Basado en duración del video
+    const tick = () => {
+      if (video.paused || video.ended) return;
+      const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+      bar.style.width = pct + '%';
+      if (!video.ended) carouselProgressTimer = requestAnimationFrame(tick);
+    };
+    carouselProgressTimer = requestAnimationFrame(tick);
+  } else {
+    // Basado en tiempo fijo
+    bar.style.transition = `width ${duracion}ms linear`;
+    bar.style.width = '100%';
+  }
+}
+
+function pausarProgreso() {
+  const bar = document.getElementById('carousel-progress');
+  if (!bar) return;
+  const computed = getComputedStyle(bar).width;
+  const total = bar.parentElement?.clientWidth || 1;
+  const pct = (parseFloat(computed) / total) * 100;
+  bar.style.transition = 'none';
+  bar.style.width = pct + '%';
+  clearTimeout(carouselTimer);
+  if (carouselProgressTimer) cancelAnimationFrame(carouselProgressTimer);
+}
+
+function reanudarProgreso() {
+  const bar = document.getElementById('carousel-progress');
+  if (!bar) return;
+  const pct = parseFloat(bar.style.width) || 0;
+  const remaining = CAROUSEL_DURATION * (1 - pct / 100);
+  bar.style.transition = `width ${remaining}ms linear`;
+  bar.style.width = '100%';
+  carouselTimer = setTimeout(avanzarCarrusel, remaining);
+}
+
+function limpiarTimer() {
+  clearTimeout(carouselTimer);
+  if (carouselProgressTimer) cancelAnimationFrame(carouselProgressTimer);
+  const bar = document.getElementById('carousel-progress');
+  if (bar) { bar.style.transition = 'none'; bar.style.width = '0%'; }
 }
 
 // ============================================================
